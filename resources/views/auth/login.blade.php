@@ -1,48 +1,61 @@
-<x-guest-layout>
-    <x-jet-authentication-card>
-        <x-slot name="logo">
-            <x-jet-authentication-card-logo />
-        </x-slot>
+@extends('layouts.app')
 
-        <x-jet-validation-errors class="mb-4" />
+@section('title', 'Login | ')
 
-        @if (session('status'))
-            <div class="mb-4 font-medium text-sm text-green-600">
-                {{ session('status') }}
-            </div>
-        @endif
+@section('content')
+    @include('partials.navbar')
 
-        <form method="POST" action="{{ route('login') }}">
+    <div class="form mx-auto px-4 my-8">
+        <form method="POST" class="shadow-lg bg-white px-6 py-4" action="{{ route('login') }}">
             @csrf
+            <div class="text-center uppercase text-xl">Welcome!</div>
+            <div class="text-center opacity-75">Access the admin dashboard by logging in</div>
 
-            <div>
-                <x-jet-label value="{{ __('Email') }}" />
-                <x-jet-input class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
+            <div class="mt-4">
+                <label for="email" class="">{{ __('E-Mail Address') }}</label>
+
+                <div class="col-md-6">
+                    <input id="email" type="email" placeholder="Email"
+                           class="form-control mt-2 @error('email') is-invalid @enderror" name="email"
+                           value="{{ old('email') }}" required autocomplete="email" autofocus>
+
+                    @error('email')
+                        <span class="invalid-feedback" role="alert">
+                             <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
             </div>
 
             <div class="mt-4">
-                <x-jet-label value="{{ __('Password') }}" />
-                <x-jet-input class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
+                <label for="password">{{ __('Password') }}</label>
+
+                <input id="password" type="password"
+                       class="form-control mt-2 @error('password') is-invalid @enderror" name="password"
+                       required autocomplete="current-password" placeholder="Password">
+
+                @error('password')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
             </div>
 
-            <div class="block mt-4">
-                <label class="flex items-center">
-                    <input type="checkbox" class="form-checkbox" name="remember">
-                    <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+            <div class="mt-4">
+                <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+
+                <label for="remember">
+                    {{ __('Remember Me') }}
                 </label>
             </div>
 
-            <div class="flex items-center justify-end mt-4">
-                @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
-                        {{ __('Forgot your password?') }}
-                    </a>
-                @endif
-
-                <x-jet-button class="ml-4">
+            <div class="mt-2">
+                <button type="submit" class="btn">
                     {{ __('Login') }}
-                </x-jet-button>
+                </button>
             </div>
         </form>
-    </x-jet-authentication-card>
-</x-guest-layout>
+    </div>
+
+    @include('partials.footer')
+@endsection
