@@ -13,17 +13,16 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-         $this->middleware([ 'auth.admin' ]);
+        $this->middleware('guard.auth');
     }
 
     /**
      * Show the application dashboard.
      *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return \Illuminate\Http\Response
      */
-    public function home()
+    public function index()
     {
-        return view('home');
+        return view('pages.home');
     }
-
 }
